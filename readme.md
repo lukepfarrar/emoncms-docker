@@ -37,6 +37,7 @@ Pull [openenergymonitor/emoncms:latest](https://hub.docker.com/r/openenergymonit
 ```
 $ git clone https://github.com/emoncms/emoncms-docker
 $ cd emoncms-docker
+$ ./bin/setup_dev_repositories
 $ docker pull openenergymonitor/emoncms:latest
 $ docker-compose up
 ```
@@ -52,7 +53,7 @@ Uncommnet in `docker-compose.override.yml`:
 ```
 volumes:
   ##mount emoncms files from local FS for dev
-  - ./emoncms:/var/www/html
+  - ./emoncms:/var/www/emoncms
 ```
 Then clone the repos into `./emoncms`
 
@@ -240,7 +241,7 @@ Remove single or all docker volumes
 
 Attach a shell to a running container:
 
-	$ docker exec -it emoncmsdocker_web_1 /bin/bash
+	$ docker exec -it emoncms-docker_web_1 /bin/bash
 
 ****
 
