@@ -45,6 +45,44 @@ services:
       - redis
       - mqtt
 
+  demandshaper:
+    # If pre-built image from docker hub exists then use that (docker pull openenergymonitor/emoncms:latest) if not Buildcontainer see Dockerflile
+    # image: openenergymonitor/emoncms:latest
+    build: .
+    environment:
+      - "MYSQL_HOST=db"
+      - "MYSQL_PORT=3306"
+      - "MYSQL_DATABASE=emoncms"
+      - "MYSQL_USER=emoncms"
+      - "MYSQL_PASSWORD=emonpiemoncmsmysql2016"
+      - "MYSQL_RANDOM_ROOT_PASSWORD=yes"
+
+      - "REDIS_ENABLED=true"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
+      - "REDIS_PREFIX='emoncms'"
+
+      - "MQTT_ENABLED=true"
+      - "MQTT_HOST=mqtt"
+      - "MQTT_USER=emonpi"
+      - "MQTT_PASSWORD=emonpimqtt2016"
+      - "MQTT_BASETOPIC=emon"
+
+      - "PHPFINA_DIR=/var/opt/emoncms/phpfina/"
+      - "PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/"
+    volumes:
+      # mount docker volumes persistant inside docker container
+      - emon-phpfina:/var/opt/emoncms/phpfina
+      - emon-phptimeseries:/var/opt/emoncms/phptimeseries
+      - emon-cms:/var/www
+      - emon-log:/var/log/emoncms
+    links:
+      # Link to MYSQL DB (see below)
+      - db
+      - redis
+      - mqtt
+    command: php /opt/emoncms/demandshaper/demandshaper_run.php
+
   # MYSQL Database
   db:
     # Official MYSQL docker image
@@ -78,7 +116,7 @@ services:
     image: eclipse-mosquitto:1.6
     ports:
       - 1883:1883
-      
+
   emoncms_mqtt:
     build: ./emoncms_mqtt
     environment:

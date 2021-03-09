@@ -10,9 +10,25 @@ services:
     volumes:
       ##mount emoncms files from local FS for dev
       - ./emoncms:/var/www/emoncms
+      - ../../energylocal/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+      - ../../energylocal/demandshaper:/opt/emoncms/demandshaper
     env_file:
       # Use default enviroment variables file for dev
       - 'default.docker-env'
+
+  demandshaper:
+    volumes:
+      ##mount emoncms files from local FS for dev
+      - ./emoncms:/var/www/emoncms
+      - ../../energylocal/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+      - ../../energylocal/demandshaper:/opt/emoncms/demandshaper
+    env_file:
+      # Use default enviroment variables file for dev
+      - 'default.docker-env'
+
+  emoncms_mqtt:
+    volumes:
+      - ./emoncms:/var/www/emoncms
 
   db:
     env_file:

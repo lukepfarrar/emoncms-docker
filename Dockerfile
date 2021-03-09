@@ -8,10 +8,10 @@ RUN apt-get update && apt-get install -y \
               libmosquitto-dev \
               gettext \
               nano \
-              git-core 
+              git-core
 
 # Enable PHP modules
-RUN docker-php-ext-install -j$(nproc) mysqli curl json gettext
+RUN docker-php-ext-install -j$(nproc) mysqli curl json gettext sockets
 RUN pecl install redis \
   \ && docker-php-ext-enable redis
 RUN pecl install Mosquitto-beta \
