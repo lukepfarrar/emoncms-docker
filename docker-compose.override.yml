@@ -10,8 +10,26 @@ services:
     volumes:
       ##mount emoncms files from local FS for dev
       - ./emoncms:/var/www/emoncms
-      - ../../energylocal/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
-      - ../../energylocal/demandshaper:/opt/emoncms/demandshaper
+
+      - ../../emoncms/app:/var/www/emoncms/Modules/app
+      # - ../../emoncms/app:/opt/emoncms/modules/app
+      - ../../emoncms/graph:/var/www/emoncms/Modules/graph
+      # - ../../emoncms/graph:/opt/emoncms/modules/graph
+      - ../../emoncms/sync/sync-module:/var/www/emoncms/Modules/sync
+      - ../../emoncms/sync:/opt/emoncms/modules/sync
+      # - ../../emoncms/usefulscripts/usefulscripts-module:/var/www/emoncms/Modules/usefulscripts
+      - ../../emoncms/usefulscripts:/opt/emoncms/modules/usefulscripts
+
+        #- ../../emoncms/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+        #- ../../emoncms/demandshaper:/opt/emoncms/modules/demandshaper
+      - ../demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+      - ../demandshaper:/opt/emoncms/modules/demandshaper
+      - ../../emoncms/device:/var/www/emoncms/Modules/device
+      # - ../../emoncms/device:/opt/emoncms/modules/device
+      - ../../emoncms/remoteaccess-server/remoteaccess-module:/var/www/emoncms/Modules/remoteaccess
+      - ../../emoncms/remoteaccess-server:/opt/emoncms/modules/remoteaccess-server
+      - ../../energylocal/cydynni/club-module:/var/www/emoncms/Modules/club
+      - ../../energylocal/cydynni:/opt/emoncms/modules/cydynni
     env_file:
       # Use default enviroment variables file for dev
       - 'default.docker-env'
@@ -20,11 +38,36 @@ services:
     volumes:
       ##mount emoncms files from local FS for dev
       - ./emoncms:/var/www/emoncms
-      - ../../energylocal/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
-      - ../../energylocal/demandshaper:/opt/emoncms/demandshaper
+      - ../../emoncms/app/app-module:/var/www/emoncms/Modules/app
+      - ../../emoncms/app:/opt/emoncms/modules/app
+      - ../../emoncms/graph/graph-module:/var/www/emoncms/Modules/graph
+      - ../../emoncms/graph:/opt/emoncms/modules/graph
+      - ../../emoncms/sync/sync-module:/var/www/emoncms/Modules/sync
+      - ../../emoncms/sync:/opt/emoncms/modules/sync
+      - ../../emoncms/usefulscripts/usefulscripts-module:/var/www/emoncms/Modules/usefulscripts
+      - ../../emoncms/usefulscripts:/opt/emoncms/modules/usefulscripts
+
+        #- ../../emoncms/demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+        #- ../../emoncms/demandshaper:/opt/emoncms/modules/demandshaper
+      - ../demandshaper/demandshaper-module:/var/www/emoncms/Modules/demandshaper
+      - ../demandshaper:/opt/emoncms/modules/demandshaper
+      - ../../emoncms/device:/var/www/emoncms/Modules/device # Why not device-module?
+      - ../../emoncms/device:/opt/emoncms/modules/device
+      - ../../emoncms/remoteaccess-server/remoteaccess-module:/var/www/emoncms/Modules/remoteaccess
+      - ../../emoncms/remoteaccess-server:/opt/emoncms/modules/remoteaccess-server
+      - ../../energylocal/cydynni/club-module:/var/www/emoncms/Modules/club
+      - ../../energylocal/cydynni:/opt/emoncms/modules/cydynni
     env_file:
       # Use default enviroment variables file for dev
       - 'default.docker-env'
+    links:
+      # Link to MYSQL DB (see below)
+      - db
+      - redis
+      - mqtt
+    # command: php /opt/emoncms/modules/demandshaper/demandshaper_run.php
+    command: tail -f /dev/null
+
 
   emoncms_mqtt:
     volumes:
@@ -36,3 +79,5 @@ services:
   redis:
     env_file:
       - 'default.docker-env'
+    ports:
+      - 6379:6379

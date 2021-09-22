@@ -23,6 +23,7 @@ MQTT_HOST=mqtt
 MQTT_USER=emonpi
 MQTT_PASSWORD=emonpimqtt2016
 MQTT_BASETOPIC=emon
+MQTT_MULTIUSER=true
 
 # Feed
 PHPFINA_DIR=/var/opt/emoncms/phpfina/

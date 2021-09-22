@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
               git-core
 
 # Enable PHP modules
+RUN pecl install mcrypt-1.0.4 && docker-php-ext-enable mcrypt
 RUN docker-php-ext-install -j$(nproc) mysqli curl json gettext sockets
 RUN pecl install redis \
   \ && docker-php-ext-enable redis
@@ -37,7 +38,7 @@ RUN git clone https://github.com/emoncms/emoncms.git /var/www/emoncms
 RUN git clone https://github.com/emoncms/dashboard.git /var/www/emoncms/Modules/dashboard
 RUN git clone https://github.com/emoncms/graph.git /var/www/emoncms/Modules/graph
 RUN git clone https://github.com/emoncms/app.git /var/www/emoncms/Modules/app
-RUN git clone https://github.com/emoncms/device.git /var/wwww/emoncms/Modules/device
+RUN git clone https://github.com/emoncms/device.git /var/www/emoncms/Modules/device
 
 COPY docker.settings.ini /var/www/emoncms/settings.ini
 

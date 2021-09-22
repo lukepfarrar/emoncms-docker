@@ -69,6 +69,7 @@ services:
       - "MQTT_USER=emonpi"
       - "MQTT_PASSWORD=emonpimqtt2016"
       - "MQTT_BASETOPIC=emon"
+      - "MQTT_MULTIUSER=true"
 
       - "PHPFINA_DIR=/var/opt/emoncms/phpfina/"
       - "PHPTIMESERIES_DIR=/var/opt/emoncms/phptimeseries/"
@@ -83,13 +84,15 @@ services:
       - db
       - redis
       - mqtt
-    command: php /opt/emoncms/demandshaper/demandshaper_run.php
+    command: php /opt/emoncms/modules/demandshaper/demandshaper_run.php
 
   # MYSQL Database
   db:
     # Official MYSQL docker image
     # To do: make compatiable with 5.7
     image: mariadb:latest
+    ports:
+      - 3306:3306
     environment:
       - "MYSQL_HOST=db"
       - "MYSQL_PORT=3306"
@@ -119,9 +122,12 @@ services:
         max-size: "10m"
 
   mqtt:
-    image: eclipse-mosquitto:1.6
+    #image: eclipse-mosquitto:1.6
+    build: ./mqtt
     ports:
       - 1883:1883
+    links:
+      - db
 
   emoncms_mqtt:
     build: ./emoncms_mqtt
